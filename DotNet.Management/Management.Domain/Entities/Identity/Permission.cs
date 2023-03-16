@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Management.Domain
 {
-    internal class Permission
+    public class Permission
     {
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string? ParentCode { get; set; }
+        public int SortOrder { get; set; }
     }
 }
