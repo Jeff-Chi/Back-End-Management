@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Management.Domain.Entities.Identity
 {
-    internal class UserRole
+    public class UserRole
     {
     }
 }

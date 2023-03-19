@@ -8,5 +8,9 @@ namespace Management.Domain
 {
     public class Permission
     {
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string? ParentCode { get; set; }
+        public int SortOrder { get; set; }
     }
 }
