@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Management.Domain
 {
-    internal class Permission
+    public class Permission
     {
     }
 }

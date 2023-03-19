@@ -1,4 +1,5 @@
 using Magament.Host;
+using Managemrnt.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
