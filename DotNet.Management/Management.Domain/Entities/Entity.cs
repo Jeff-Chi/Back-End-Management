@@ -1,4 +1,6 @@
-﻿namespace Management.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Management.Domain
 {
     public class Entity<TKey>
     {
@@ -6,6 +8,7 @@
         {
             Id = id;
         }
+        [Key]
         public TKey Id { get; set; }
     }
 }
