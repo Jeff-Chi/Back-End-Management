@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Managemrnt.EFCore
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -31,6 +31,50 @@ namespace Managemrnt.EFCore
 
                 // relations
 
+                // indexs
+                b.HasIndex(u => u.UserName);
+                b.HasIndex(u => u.Email);
+            });
+
+            modelBuilder.Entity<Role>(b =>
+            {
+                // properties
+                b.Property(r => r.Name).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(r => r.Code).HasMaxLength(Constants.MaxCode).IsRequired();
+                b.Property(r => r.Description).HasMaxLength(Constants.MaxDescriptionLength);
+            });
+
+            modelBuilder.Entity<UserRole>(b =>
+            {
+                // Key
+                b.HasKey(ur => new { ur.UserId, ur.Role });
+
+                // properties
+                b.Property(ur => ur.UserId).IsRequired();
+                b.Property(ur => ur.RoleId).IsRequired();
+
+                // relations
+                b.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId);
+                b.HasOne(ur => ur.Role).WithMany().HasForeignKey(ur => ur.RoleId);
+            });
+
+            modelBuilder.Entity<Permission>(b =>
+            {
+                // properties
+                b.Property(u => u.Name).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(u => u.Code).HasMaxLength(Constants.MaxCode).IsRequired();
+                b.Property(u => u.ParentCode).HasMaxLength(Constants.MaxCode);
+                b.Property(u => u.SortOrder).IsRequired();
+            });
+
+            modelBuilder.Entity<RolePermission>(b =>
+            {
+                // Key
+                b.HasKey(rp => new { rp.RoleId, rp.PermissionCode });
+
+                // relations
+                b.HasOne(up => up.Role).WithMany(r => r.RolePermissions).HasForeignKey(up => up.RoleId);
+                b.HasOne(up => up.Permission).WithMany().HasForeignKey(up => up.PermissionCode);
             });
 
             #endregion

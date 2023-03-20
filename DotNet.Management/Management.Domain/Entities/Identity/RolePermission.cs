@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,5 +26,12 @@ namespace Management.Domain
         /// 权限编码
         /// </summary>
         public string PermissionCode { get; set; } = string.Empty;
+
+        #region navigation properties
+
+        public Role? Role { get; set; }
+        public Permission? Permission { get; set; }
+
+        #endregion
     }
 }

@@ -17,5 +17,15 @@
         /// 编码
         /// </summary>
         public string Code { get; set; } = string.Empty;
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description { get; set; }
+
+        #region navigation properties
+
+        public ICollection<RolePermission> RolePermissions { get; set; }
+
+        #endregion
     }
 }
