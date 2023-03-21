@@ -83,7 +83,7 @@ namespace Management.Domain
             TKey id,
             bool autoSave,
             CancellationToken cancellationToken = default);
-        Task<TEntity> GetAsync(
+        Task<TEntity?> GetAsync(
             TKey id,
             CancellationToken cancellationToken = default);
     }

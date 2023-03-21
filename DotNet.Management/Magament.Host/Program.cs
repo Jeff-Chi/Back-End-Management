@@ -1,4 +1,5 @@
 using Magament.Host;
+using Management.Domain;
 using Managemrnt.EFCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerService();
+
+#region 注入泛型服务
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+#endregion
+
 
 var app = builder.Build();
 
