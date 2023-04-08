@@ -1,14 +1,13 @@
-﻿namespace Management.Domain
-{
-    /// <summary>
-    /// 角色
-    /// </summary>
-    public class Role : ModificationEntity<long>
-    {
-        public Role(long id) : base(id)
-        {
-        }
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Management.Application
+{
+    public class CreateRoleInputDto
+    {
         /// <summary>
         /// 名称
         /// </summary>
@@ -21,11 +20,5 @@
         /// 描述
         /// </summary>
         public string? Description { get; set; }
-
-        #region navigation properties
-
-        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-
-        #endregion
     }
 }

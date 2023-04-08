@@ -47,7 +47,7 @@ namespace Managemrnt.EFCore
             modelBuilder.Entity<UserRole>(b =>
             {
                 // Key
-                b.HasKey(ur => new { ur.UserId, ur.Role });
+                b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 // properties
                 b.Property(ur => ur.UserId).IsRequired();

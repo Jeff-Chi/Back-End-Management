@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Managemrnt.EFCore
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity>, IScopedDependency where TEntity : class
     {
         public Repository(AppDbContext context)
         {

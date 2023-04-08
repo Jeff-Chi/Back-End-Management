@@ -12,6 +12,9 @@ namespace Management.Host
             var assemblies = Directory.GetFiles(path, "*.dll").Select(Assembly.LoadFrom).ToArray();
 
             var allTypes = assemblies.SelectMany(a => a.GetTypes());
+
+            #region interfaces
+            // 实现接口方式注入服务
             var interFaceTypes = allTypes.Where(t => t.IsAssignableFrom(typeof(IDependency)) && t.IsClass && !t.IsAbstract && !t.IsGenericType);
             foreach (var type in interFaceTypes)
             {
@@ -35,9 +38,11 @@ namespace Management.Host
                     AddTransient(services, type, types);
                 }
             }
+
+            #endregion
         }
 
-        public static void AddScoped(IServiceCollection services, Type classType, Type[]? iTypes)
+        private static void AddScoped(IServiceCollection services, Type classType, Type[]? iTypes)
         {
             if (iTypes == null || !iTypes.Any())
             {
@@ -50,7 +55,7 @@ namespace Management.Host
             }
         }
 
-        public static void AddSingleton(IServiceCollection services, Type classType, Type[]? iTypes)
+        private static void AddSingleton(IServiceCollection services, Type classType, Type[]? iTypes)
         {
             if (iTypes == null || !iTypes.Any())
             {
@@ -64,7 +69,7 @@ namespace Management.Host
 
         }
 
-        public static void AddTransient(IServiceCollection services, Type classType, Type[]? iTypes)
+        private static void AddTransient(IServiceCollection services, Type classType, Type[]? iTypes)
         {
             if (iTypes == null || !iTypes.Any())
             {
