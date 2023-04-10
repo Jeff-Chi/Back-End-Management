@@ -60,6 +60,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<Permission>(b =>
             {
+                b.HasKey(p => p.Code);
+
                 // properties
                 b.Property(u => u.Name).HasMaxLength(Constants.MaxNameLength).IsRequired();
                 b.Property(u => u.Code).HasMaxLength(Constants.MaxCode).IsRequired();
