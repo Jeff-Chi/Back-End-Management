@@ -14,6 +14,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllCrosDomainsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddSwaggerService();
 
 #region 注入泛型服务
@@ -31,6 +41,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerMiddleware();
 }
+
+// cors
+app.UseCors("AllCrosDomainsPolicy");
 
 app.UseHttpsRedirection();
 
