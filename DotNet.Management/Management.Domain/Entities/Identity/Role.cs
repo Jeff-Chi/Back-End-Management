@@ -18,6 +18,10 @@
         /// </summary>
         public string Code { get; set; } = string.Empty;
         /// <summary>
+        /// 是否超级管理员
+        /// </summary>
+        public bool IsSuperAdmin { get; set; }
+        /// <summary>
         /// 描述
         /// </summary>
         public string? Description { get; set; }
