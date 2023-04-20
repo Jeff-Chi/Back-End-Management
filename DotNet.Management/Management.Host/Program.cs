@@ -1,5 +1,6 @@
 using Magament.Host;
 using Management.Domain;
+using Management.Host.Middlewares;
 using Managemrnt.EFCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerMiddleware();
 }
+
+//读取图片的中间件
+app.UseDownFilesMiddleware(Directory.GetCurrentDirectory());
 
 // cors
 app.UseCors("AllCrosDomainsPolicy");
