@@ -48,6 +48,8 @@ if (app.Environment.IsDevelopment())
 // cors
 app.UseCors("AllCrosDomainsPolicy");
 
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

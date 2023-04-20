@@ -31,7 +31,7 @@ namespace Management.Host.Controllers.Infrastructure
             }
 
             // TODO:检查支持的文件类型
-            string directory = Path.Combine("upload","files");
+            string directory = Path.Combine(Directory.GetCurrentDirectory(),"upload","files");
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
@@ -39,6 +39,9 @@ namespace Management.Host.Controllers.Infrastructure
 
             fileName = Guid.NewGuid().ToString();
             string filePath = Path.Combine(directory,fileName);
+
+            string relativeURL = Path.Combine("/" + "upload", "files", fileName);
+            relativeURL = relativeURL.Replace('\\', '/');
 
             if (!System.IO.File.Exists(filePath))
             {
@@ -49,7 +52,7 @@ namespace Management.Host.Controllers.Infrastructure
                 }
             }
 
-            return Ok(new FileUploadResultDto { FileUrl = filePath });
+            return Ok(new FileUploadResultDto { FileUrl = relativeURL });
         }
     }
 }
