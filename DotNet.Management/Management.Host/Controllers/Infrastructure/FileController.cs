@@ -1,6 +1,8 @@
 ﻿using Management.Application.Dtos;
+using Management.Infrastructure.FileUpload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.IO;
 
 namespace Management.Host.Controllers.Infrastructure
@@ -9,6 +11,16 @@ namespace Management.Host.Controllers.Infrastructure
     [ApiController]
     public class FileController : ControllerBase
     {
+        private readonly FileUploadOptions _fileUploadOptions;
+        public FileController(IOptions<FileUploadOptions> options, IHostEnvironment hostEnvironment, IWebHostEnvironment webEnvironment)
+        {
+            _fileUploadOptions = options.Value;
+            if (string.IsNullOrWhiteSpace(_fileUploadOptions.PhysicalStoragePath))
+            {
+                _fileUploadOptions.PhysicalStoragePath = Path.Combine(hostEnvironment.ContentRootPath, _fileUploadOptions.StoreRootDirName);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile formFile)
         {
@@ -30,8 +42,8 @@ namespace Management.Host.Controllers.Infrastructure
                 throw new Exception("文件扩展名不合法!");
             }
 
-            // TODO:检查支持的文件类型
-            string directory = Path.Combine(Directory.GetCurrentDirectory(),"upload","files");
+            // TODO:检查支持的文件类型 扩展名,文件大小等
+            string directory = Path.Combine(_fileUploadOptions.PhysicalStoragePath, _fileUploadOptions.RootDirName, _fileUploadOptions.NormalDirName);
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
@@ -40,7 +52,7 @@ namespace Management.Host.Controllers.Infrastructure
             fileName = Guid.NewGuid().ToString();
             string filePath = Path.Combine(directory,fileName);
 
-            string relativeURL = Path.Combine("/" + "upload", "files", fileName);
+            string relativeURL = Path.Combine("/" + _fileUploadOptions.RootDirName, _fileUploadOptions.NormalDirName, fileName);
             relativeURL = relativeURL.Replace('\\', '/');
 
             if (!System.IO.File.Exists(filePath))

@@ -1,6 +1,8 @@
 using Magament.Host;
 using Management.Domain;
+using Management.Host.Extensions;
 using Management.Host.Middlewares;
+using Management.Infrastructure.FileUpload;
 using Managemrnt.EFCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,8 +29,9 @@ builder.Services.AddCors(options =>
         builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
-
 builder.Services.AddSwaggerService();
+
+builder.Services.Configure<FileUploadOptions>(builder.Configuration.GetSection(FileUploadOptions.SectionName));
 
 #region 注入泛型服务
 
@@ -52,7 +55,8 @@ app.UseDownFilesMiddleware(Directory.GetCurrentDirectory());
 // cors
 app.UseCors("AllCrosDomainsPolicy");
 
-app.UseStaticFiles();
+// static files
+app.UseMultipleStaticFiles();
 
 app.UseHttpsRedirection();
 

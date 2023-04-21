@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Application", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Host", "Management.Host\Management.Host.csproj", "{1789761E-B47D-4FF3-972C-2F0EF832D750}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Infrastructure", "Management.Infrastructure\Management.Infrastructure.csproj", "{BED6E8EB-3350-464D-8C8F-4B9504826306}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1789761E-B47D-4FF3-972C-2F0EF832D750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1789761E-B47D-4FF3-972C-2F0EF832D750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1789761E-B47D-4FF3-972C-2F0EF832D750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BED6E8EB-3350-464D-8C8F-4B9504826306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BED6E8EB-3350-464D-8C8F-4B9504826306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BED6E8EB-3350-464D-8C8F-4B9504826306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BED6E8EB-3350-464D-8C8F-4B9504826306}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
