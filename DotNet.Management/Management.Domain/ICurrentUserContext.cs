@@ -13,10 +13,17 @@ namespace Management.Domain
         HashSet<string> PermissionCodes { get;}
         HashSet<long> RoleIds { get; }
 
+        void SetValue(long? id);
+
+        void SetValue(
+            long? id,
+            string? userName);
+
         void SetValue(
             long? id,
             string? userName,
             HashSet<string> permissionCods,
             HashSet<long> roleIds);
+        
     }
 }

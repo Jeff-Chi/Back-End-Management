@@ -19,6 +19,16 @@ namespace Management.Domain
 
         public HashSet<long> RoleIds { get; private set; } = new HashSet<long>();
 
+        public void SetValue(long? id)
+        {
+            SetValue(id, null);
+        }
+
+        public void SetValue(long? id, string? userName)
+        {
+            SetValue(id, userName, new HashSet<string>(), new HashSet<long>());
+        }
+
         public void SetValue(
             long? id, 
             string? userName, 
@@ -30,5 +40,7 @@ namespace Management.Domain
             PermissionCodes = permissionCods;
             RoleIds = roleIds;
         }
+
+        
     }
 }

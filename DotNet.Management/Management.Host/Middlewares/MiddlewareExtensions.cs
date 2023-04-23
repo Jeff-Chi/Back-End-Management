@@ -6,5 +6,10 @@
         {
             return app.UseMiddleware<DownFilesMiddleware>(directoryPath);
         }
+
+        public static IApplicationBuilder UseCurrentUser(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<CurrentUserMiddleware>();
+        }
     }
 }

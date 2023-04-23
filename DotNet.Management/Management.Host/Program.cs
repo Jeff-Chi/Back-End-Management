@@ -60,6 +60,10 @@ app.UseMultipleStaticFiles();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
+app.UseCurrentUser();
+
 app.UseAuthorization();
 
 app.MapControllers();
