@@ -1,10 +1,15 @@
 using Magament.Host;
+using Management.Application;
 using Management.Domain;
+using Management.Host;
 using Management.Host.Extensions;
 using Management.Host.Middlewares;
 using Management.Infrastructure.FileUpload;
 using Managemrnt.EFCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,13 +36,46 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddSwaggerService();
 
+#region options
+
 builder.Services.Configure<FileUploadOptions>(builder.Configuration.GetSection(FileUploadOptions.SectionName));
 
-#region 注入泛型服务
+builder.Services.Configure<JwtTokenOptions>(builder.Configuration.GetSection(JwtTokenOptions.SectionName));
 
+#endregion
+
+#region Authentication
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // https 默认为true
+        //options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JwtToken:Issuer"],
+            ValidAudience = builder.Configuration["JwtToken:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]!)),
+            ClockSkew = TimeSpan.FromMinutes(1) // 偏差
+        };
+
+        // options.Events 事件处理
+    });
+
+#endregion
+
+#region 批量服务注入
+
+builder.Services.RegisterServices();
+
+// 注入泛型服务
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+
 #endregion
 
 
