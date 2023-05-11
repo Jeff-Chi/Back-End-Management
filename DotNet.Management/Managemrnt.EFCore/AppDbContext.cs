@@ -1,22 +1,46 @@
 ﻿using Management.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Management.Domain.Entities;
 
 namespace Managemrnt.EFCore
 {
     public class AppDbContext : DbContext
     {
+
+        //public virtual ChangeTracker ChangeTracker
+        //=> _changeTracker ??= InternalServiceProvider.GetRequiredService<IChangeTrackerFactory>().Create();
+
+        private ICurrentUserContext? _currentUserContext;
+        public ICurrentUserContext CurrentUserContext 
+        {
+            get
+            {
+                if(_currentUserContext == null && this is IInfrastructure<IServiceProvider> serviceProvider)
+                {
+                    _currentUserContext = serviceProvider.GetService<CurrentUserContext>();
+                }
+                return _currentUserContext;
+            }
+        }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // TODO: soft delete query
+
             #region Identity
 
             modelBuilder.Entity<User>(b =>
@@ -84,9 +108,34 @@ namespace Managemrnt.EFCore
             base.OnModelCreating(modelBuilder);
         }
 
+        public override Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
+        {
+            foreach (EntityEntry entry in ChangeTracker.Entries())
+            {
+                var entity = entry.Entity;
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        SetCreationProperties(entity);
+                        break;
+                    case EntityState.Modified:
+                        SetModificationProperties(entity);
+                        break;
+                    case EntityState.Deleted:
+                        SetDeletionProperties(entry);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
 
         #region DbSet
 
+        // public DbSet<User> Users => Set<User>(); 只读..
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
@@ -94,5 +143,43 @@ namespace Managemrnt.EFCore
         public DbSet<RolePermission> RolePermissions { get; set; }
 
         #endregion
+        
+        private void SetCreationProperties(object entity)
+        {
+            if (entity is ICreationAuditedObject creationAuditedObject)
+            {
+                creationAuditedObject.CreationTime = DateTime.Now;
+                if (CurrentUserContext != null && CurrentUserContext.Id != null)
+                {
+                    creationAuditedObject.CreatorId = CurrentUserContext.Id;
+                }
+            }
+        }
+
+        private void SetModificationProperties(object entity)
+        {
+            if (entity is IAuditedObject auditedObject)
+            {
+                auditedObject.ModificationTime = DateTime.Now;
+                if (CurrentUserContext != null && CurrentUserContext.Id != null)
+                {
+                    auditedObject.ModifierId = CurrentUserContext.Id;
+                }
+            }
+        }
+
+        private void SetDeletionProperties(EntityEntry entry)
+        {
+            if (entry is IFullAuditedObject fullAuditedObject && !fullAuditedObject.IsDeleted)
+            {
+                entry.State = EntityState.Modified;
+                fullAuditedObject.IsDeleted = true;
+                fullAuditedObject.DeletionTime = DateTime.Now;
+                if (CurrentUserContext != null && CurrentUserContext.Id != null)
+                {
+                    fullAuditedObject.DeleterId = CurrentUserContext.Id;
+                }
+            }
+        }
     }
 }

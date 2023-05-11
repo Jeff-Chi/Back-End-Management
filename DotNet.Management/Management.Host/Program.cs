@@ -7,6 +7,7 @@ using Management.Host.Middlewares;
 using Management.Infrastructure.FileUpload;
 using Managemrnt.EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -65,6 +66,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         // options.Events 事件处理
     });
+
+#endregion
+
+
+#region MyRegion
+
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, AppAuthorizationPolicyProvider>();
+
+builder.Services.AddScoped<IAuthorizationHandler, AppAuthorizationHandler>();
 
 #endregion
 

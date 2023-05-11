@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Management.Domain
 {
-    public class ModificationEntity<TKey> : CreationEntity<TKey>, IAuditedObject
+    public interface IAuditedObject : ICreationAuditedObject
     {
-        public ModificationEntity(TKey id) : base(id)
-        {
-        }
         /// <summary>
         /// 修改人ID
         /// </summary>

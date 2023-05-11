@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Management.Domain
 {
-    public class CreationEntity<TKey> : Entity<TKey>, ICreationAuditedObject
+    public interface ICreationAuditedObject
     {
-        public CreationEntity(TKey id) : base(id)
-        {
-        }
-
         /// <summary>
         /// 创建人ID
         /// </summary>
@@ -20,6 +16,6 @@ namespace Management.Domain
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreationTime { get; set; } = DateTime.Now;
+        public DateTime CreationTime { get; set; }
     }
 }
