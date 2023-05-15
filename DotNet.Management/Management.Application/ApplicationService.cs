@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Management.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,12 +10,26 @@ namespace Management.Application
 {
     public class ApplicationService: IApplicationService//:IScopedDependency
     {
-        // TODO: 权限验证，抛出异常等公用代码
-        private static int _index;
-
-        protected int GenerateId()
+        protected long GenerateId()
         {
-            return ++_index;
+           return IdGenerator.GenerateNewId();
+        }
+
+        protected static void ValidateNotNull(object? value, string? message = null)
+        {
+            if (value == null)
+            {
+                throw new BusinessException(message ?? "Target Not Found")
+                {
+                    HttpStatusCode = (int)HttpStatusCode.NotFound
+                };
+            }
+        }
+
+        protected static void ForbiddonError(string? message = null)
+        {
+            // Permission Denied
+            throw new UnauthorizedAccessException(message ?? "Forbiddon Error");
         }
     }
 }

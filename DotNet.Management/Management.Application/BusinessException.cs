@@ -16,6 +16,12 @@ namespace Management.Application
         {
         }
 
+        public BusinessException(string code, string message) : base(message)
+        {
+            Code = code;
+        }
+
         public string Code { get; set; } = string.Empty;
+        public int? HttpStatusCode { get; set; }
     }
 }
