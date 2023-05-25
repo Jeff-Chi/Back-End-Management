@@ -19,10 +19,7 @@ namespace Management.Application
         {
             if (value == null)
             {
-                throw new BusinessException(message ?? "Target Not Found")
-                {
-                    HttpStatusCode = (int)HttpStatusCode.NotFound
-                };
+                throw new BusinessException(message ?? "Target Not Found");
             }
         }
 

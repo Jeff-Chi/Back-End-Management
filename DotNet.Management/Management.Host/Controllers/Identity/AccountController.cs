@@ -9,10 +9,10 @@ namespace Management.Host.Controllers.Identity
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IUserAppService _userAppService;
-        public UserController(IUserAppService userAppService)
+        public AccountController(IUserAppService userAppService)
         {
             _userAppService = userAppService;
         }
@@ -50,6 +50,11 @@ namespace Management.Host.Controllers.Identity
         public async Task Delete(int id)
         {
             await _userAppService.DeleteAsync(id);
+        }
+
+        public async Task<JwtTokenDto> LoginAsync(UserLoginDto loginDto)
+        {
+            return new JwtTokenDto();
         }
     }
 }

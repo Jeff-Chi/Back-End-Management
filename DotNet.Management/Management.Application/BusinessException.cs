@@ -22,6 +22,5 @@ namespace Management.Application
         }
 
         public string Code { get; set; } = string.Empty;
-        public int? HttpStatusCode { get; set; }
     }
 }

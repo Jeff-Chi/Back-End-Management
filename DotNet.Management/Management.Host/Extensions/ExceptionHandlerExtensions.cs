@@ -33,9 +33,7 @@ namespace Management.Host
                         {
                             if (exception is BusinessException businessException)
                             {
-                                statusCode = businessException.HttpStatusCode.HasValue ?
-                                businessException.HttpStatusCode.Value : (int)HttpStatusCode.BadRequest;
-
+                                statusCode = (int)HttpStatusCode.BadRequest;
                                 errorResponse.Code = businessException.Code;
                                 errorResponse.Message = businessException.Message;
                             }
