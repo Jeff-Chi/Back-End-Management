@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Management.Domain
 {
-    public class QueryUsersDto: PageDtos
+    public class SortingDto: PageDto
     {
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public string? Sorting { get; set; }
     }
 }

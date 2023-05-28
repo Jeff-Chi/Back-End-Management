@@ -8,8 +8,12 @@ namespace Management.Domain
 {
     public interface IUserRepository : IRepository<long, User>
     {
-        Task<List<User>> GetListAsync(QueryUsersDto input);
+        Task<List<User>> GetListAsync(GetUsersInput input);
 
-        Task<int> CountAsync(QueryUsersDto input);
+        Task<int> CountAsync(GetUsersInput input);
+
+        Task<User?> GetAsync(string account,string password);
+
+        Task<User?> GetAsync(long id, GetUserDetailsInput? input);
     }
 }

@@ -25,6 +25,10 @@
         /// 描述
         /// </summary>
         public string? Description { get; set; }
+        /// <summary>
+        /// 是否禁用
+        /// </summary>
+        public bool IsDisabled { get; set; }
 
         #region navigation properties
 

@@ -1,20 +1,32 @@
 ﻿using AutoMapper;
 using Management.Domain;
+using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Management.Application
 {
     public class UserAppService: ApplicationService,IUserAppService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
-        public UserAppService(IUserRepository userRepository, IMapper mapper)
+        private readonly IJwtTokenService _jwtTokenService;
+        public UserAppService(
+            IUserRepository userRepository, 
+            IRoleRepository roleRepository,
+            IMapper mapper, 
+            IJwtTokenService jwtTokenService)
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
             _mapper = mapper;
+            _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<PageResultDto<UserDto>> GetListAsync(QueryUsersDto input)
+        public async Task<PageResultDto<UserDto>> GetListAsync(GetUsersInputDto inputDto)
         {
+            var input = _mapper.Map<GetUsersInput>(inputDto);
             int count = await _userRepository.CountAsync(input);
             if (count == 0)
             {
@@ -32,14 +44,11 @@ namespace Management.Application
             };
         }
 
-        public async Task<UserDto?> GetAsync(long id)
+        public async Task<UserDto> GetAsync(long id)
         {
             var user = await _userRepository.GetAsync(id);
 
-            if (user == null)
-            {
-                return null;
-            }
+            ValidateNotNull(user);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -53,28 +62,74 @@ namespace Management.Application
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task UpdateAsync(long id, CreateUserInputDto input)
+        public async Task UpdateAsync(long id, UpdateUserInputDto input)
         {
             var user = await _userRepository.GetAsync(id);
-            if(user == null)
-            {
-                throw new Exception("未找到用户");
-            }
+
+            ValidateNotNull(user);
             _mapper.Map(input, user);
 
-            await _userRepository.UpdateAsync(user, true);
+            await _userRepository.UpdateAsync(user!, true);
         }
 
         public async Task DeleteAsync(long id)
         {
             var user = await _userRepository.GetAsync(id);
 
+            ValidateNotNull(user);
+
+            await _userRepository.DeleteAsync(user!, true);
+        }
+
+        public async Task<JwtTokenDto> LoginAsync(UserLoginDto userLoginDto)
+        {
+            User? user = await _userRepository.GetAsync(userLoginDto.UserName,userLoginDto.Password);
             if (user == null)
             {
-                throw new Exception("未找到用户");
+                throw new BusinessException("用户名或密码错误!");
             }
 
-            await _userRepository.DeleteAsync(user, true);
+            user.LastLoginTime = DateTime.Now;
+            await _userRepository.UpdateAsync(user,true);
+            return CreateTokenDto(user);
         }
+
+        public async Task<List<RoleDto>> GetRolesAsync(long userId)
+        {
+            User? user = await _userRepository.GetAsync(userId);
+
+            ValidateNotNull(user);
+            var roles = _roleRepository.GetListAsync(userId);
+
+            return _mapper.Map<List<RoleDto>>(roles);
+        }
+
+        public async Task UpdateUserRolesAsync(long userId, List<long> roleIds)
+        {
+            User? user = await _userRepository.GetAsync(userId,new GetUserDetailsInput { IncludeUserRoles = true});
+
+            ValidateNotNull(user);
+
+            user!.UserRoles = roleIds.Select(r => new UserRole(userId, r)).ToList();
+            await _userRepository.UpdateAsync(user,true);
+        }
+
+        #region private methods
+
+        private JwtTokenDto CreateTokenDto(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString(),ClaimValueTypes.Integer64),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(), ClaimValueTypes.Integer64),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.Id.ToString(), ClaimValueTypes.String)
+            };
+
+            return _jwtTokenService.CreateToken(user.Id,claims);
+        }
+
+        #endregion
+
     }
 }

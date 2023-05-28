@@ -23,4 +23,12 @@ namespace Management.Application
         /// </summary>
         public string Password { get; set; } = string.Empty;
     }
+
+    public class UpdateUserInputDto
+    {
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public string? NickName { get; set; }
+    }
 }
