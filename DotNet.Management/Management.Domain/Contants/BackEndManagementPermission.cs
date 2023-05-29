@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
-namespace Management.Application
+namespace Management.Domain
 {
     public static class BackEndManagementPermission
     {
@@ -23,6 +18,8 @@ namespace Management.Application
             public const string Update = GroupName + ".Update";
             [Description("删除")]
             public const string Delete = GroupName + ".Delete";
+            [Description("设置角色")]
+            public const string SetRole = GroupName + ".SetRole";
         }
 
         public static class RolePermissionGroup
@@ -37,6 +34,8 @@ namespace Management.Application
             public const string Update = GroupName + ".Update";
             [Description("删除")]
             public const string Delete = GroupName + ".Delete";
+            [Description("设置权限")]
+            public const string SetPermission = GroupName + ".SetPermission";
         }
 
     }

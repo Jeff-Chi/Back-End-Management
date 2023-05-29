@@ -10,6 +10,8 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Management.Domain.Entities;
+using static Management.Domain.BackEndManagementPermission;
+using System.Xml.Linq;
 
 namespace Managemrnt.EFCore
 {
@@ -102,6 +104,25 @@ namespace Managemrnt.EFCore
                 b.HasOne(up => up.Role).WithMany(r => r.RolePermissions).HasForeignKey(up => up.RoleId);
                 b.HasOne(up => up.Permission).WithMany().HasForeignKey(up => up.PermissionCode);
             });
+
+            #endregion
+
+            #region seeder
+
+            modelBuilder.Entity<Permission>().HasData(
+                new Permission { Code = UserPermissionGroup.GroupName, Name = "用户管理", SortOrder = 1 },
+                new Permission { Code = UserPermissionGroup.Query, Name = "查询", SortOrder = 2,ParentCode = UserPermissionGroup.GroupName },
+                new Permission { Code = UserPermissionGroup.Create, Name = "创建", SortOrder = 3, ParentCode = UserPermissionGroup.GroupName },
+                new Permission { Code = UserPermissionGroup.Update, Name = "更新", SortOrder = 4, ParentCode = UserPermissionGroup.GroupName },
+                new Permission { Code = UserPermissionGroup.Delete, Name = "删除", SortOrder = 5, ParentCode = UserPermissionGroup.GroupName },
+                new Permission { Code = UserPermissionGroup.SetRole, Name = "设置角色", SortOrder = 6, ParentCode = UserPermissionGroup.GroupName },
+
+                new Permission { Code = RolePermissionGroup.GroupName, Name = "角色管理", SortOrder = 7 },
+                new Permission { Code = RolePermissionGroup.Query, Name = "查询", SortOrder = 8, ParentCode = RolePermissionGroup.GroupName },
+                new Permission { Code = RolePermissionGroup.Create, Name = "创建", SortOrder = 9, ParentCode = RolePermissionGroup.GroupName },
+                new Permission { Code = RolePermissionGroup.Update, Name = "更新", SortOrder = 10, ParentCode = RolePermissionGroup.GroupName },
+                new Permission { Code = RolePermissionGroup.Delete, Name = "删除", SortOrder = 11, ParentCode = RolePermissionGroup.GroupName },
+                new Permission { Code = RolePermissionGroup.Delete, Name = "设置权限", SortOrder = 12, ParentCode = RolePermissionGroup.GroupName });
 
             #endregion
 
