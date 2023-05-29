@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Management.Application
 {
-    public static class PermissionGroup
+    public static class BackEndManagementPermission
     {
         public const string BackEndManagement = "BackEndManagement";
 
