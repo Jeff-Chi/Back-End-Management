@@ -11,5 +11,7 @@ namespace Management.Domain
         public string? Name { get; set; }
         public bool? IsDisabled { get; set; }
         public string? Code { get; set; }
+        public List<long>? Ids { get; set; }
+        public bool IncludeRolePermission { get; set; }
     }
 }

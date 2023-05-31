@@ -6,16 +6,16 @@ using System.Security.Claims;
 
 namespace Management.Application
 {
-    public class UserAppService: ApplicationService,IUserAppService
+    public class UserAppService : ApplicationService, IUserAppService
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
         private readonly IJwtTokenService _jwtTokenService;
         public UserAppService(
-            IUserRepository userRepository, 
+            IUserRepository userRepository,
             IRoleRepository roleRepository,
-            IMapper mapper, 
+            IMapper mapper,
             IJwtTokenService jwtTokenService)
         {
             _userRepository = userRepository;
@@ -57,7 +57,7 @@ namespace Management.Application
         {
             User user = _mapper.Map(input, new User(GenerateId()));
 
-            await _userRepository.InsertAsync(user,true);
+            await _userRepository.InsertAsync(user, true);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -83,14 +83,14 @@ namespace Management.Application
 
         public async Task<JwtTokenDto> LoginAsync(UserLoginDto userLoginDto)
         {
-            User? user = await _userRepository.GetAsync(userLoginDto.UserName,userLoginDto.Password);
+            User? user = await _userRepository.GetAsync(userLoginDto.UserName, userLoginDto.Password);
             if (user == null)
             {
                 throw new BusinessException("用户名或密码错误!");
             }
 
             user.LastLoginTime = DateTime.Now;
-            await _userRepository.UpdateAsync(user,true);
+            await _userRepository.UpdateAsync(user, true);
             return CreateTokenDto(user);
         }
 
@@ -106,12 +106,32 @@ namespace Management.Application
 
         public async Task UpdateUserRolesAsync(long userId, List<long> roleIds)
         {
-            User? user = await _userRepository.GetAsync(userId,new GetUserDetailsInput { IncludeUserRoles = true});
+            User? user = await _userRepository.GetAsync(userId, new GetUserDetailsInput { IncludeUserRoles = true });
 
             ValidateNotNull(user);
 
             user!.UserRoles = roleIds.Select(r => new UserRole(userId, r)).ToList();
-            await _userRepository.UpdateAsync(user,true);
+            await _userRepository.UpdateAsync(user, true);
+        }
+
+        public async Task<CurrentUserDto> GetCurrentUserAsync(CurrentUserContext currentUserContext)
+        {
+            User? user = await _userRepository.GetAsync(currentUserContext.Id!.Value,
+                new GetUserDetailsInput { IncludeUserRoles = true });
+
+            ValidateNotNull(user);
+
+            CurrentUserDto currentUserDto = new()
+            {
+                UserName = user!.UserName,
+                NickName = user.NickName
+            };
+
+            List<Permission> permissions = await _roleRepository.GetPermissionsAsync(user.UserRoles.Select(ur => ur.RoleId).ToList());
+
+            currentUserDto.Permissions = _mapper.Map<List<PermissionDto>>(permissions);
+
+            return currentUserDto;
         }
 
         #region private methods
@@ -126,7 +146,7 @@ namespace Management.Application
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Id.ToString(), ClaimValueTypes.String)
             };
 
-            return _jwtTokenService.CreateToken(user.Id,claims);
+            return _jwtTokenService.CreateToken(user.Id, claims);
         }
 
         #endregion

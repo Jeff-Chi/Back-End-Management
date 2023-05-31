@@ -1,4 +1,5 @@
 ﻿using Management.Domain;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 namespace Managemrnt.EFCore
@@ -27,6 +28,35 @@ namespace Managemrnt.EFCore
                 .Select(ur => ur.Role!).ToListAsync();
         }
 
+        public async Task<Role?> GetAsync(long id, GetRoleDetailsInput input)
+        {
+            var query = DbSet.Where(r => r.Id == id);
+            if (input != null)
+            {
+                query = query.IncludeIf(input.IncludeRolePermission, r => r.RolePermissions);
+            }
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Permission>> GetPermissionsAsync()
+        {
+            return await Context.Permissions.ToListAsync();
+        }
+
+        public async Task<List<Permission>> GetPermissionsAsync(List<long> roleIds)
+        {
+            var query = from a in DbSet
+                        join b in Context.RolePermissions
+                        on a.Id equals b.RoleId
+                        join c in Context.Permissions
+                        on b.PermissionCode equals c.Code
+                        where roleIds.Contains(a.Id)
+                        orderby c.SortOrder
+                        select c;
+            return await query.ToListAsync();
+        }
+
+
         #region private methods
 
         private IQueryable<Role> Build(IQueryable<Role> query, GetRolesInput? input, bool page = false)
@@ -36,9 +66,11 @@ namespace Managemrnt.EFCore
                 return query;
             }
 
-            query = query.WhereIf(!string.IsNullOrWhiteSpace(input.Name), r => r.Name.Contains(input.Name!))
+            query = query.IncludeIf(input.IncludeRolePermission, r => r.RolePermissions)
+                .WhereIf(!input.Name.IsNullOrWhiteSpace(), r => r.Name.Contains(input.Name!))
                 .WhereIf(input.IsDisabled.HasValue, r => r.IsDisabled == input.IsDisabled)
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Code), r => r.Code == input.Code)
+                .WhereIf(!input.Code.IsNullOrWhiteSpace(), r => r.Code == input.Code)
+                .WhereIf(!input.Ids.IsNullOrEmpty(), r => input.Ids!.Contains(r.Id))
                 .OrderByDescending(r => r.CreationTime)
                 .PageIf(page, input);
 

@@ -66,5 +66,13 @@ namespace Management.Application
         /// <param name="roleIds"></param>
         /// <returns></returns>
         Task UpdateUserRolesAsync(long userId,List<long> roleIds);
+
+        /// <summary>
+        /// 获取当前用户信息
+        /// </summary>
+        /// <param name="currentUserContext">当前用户context</param>
+        /// <returns></returns>
+        Task<CurrentUserDto> GetCurrentUserAsync(CurrentUserContext currentUserContext);
+
     }
 }

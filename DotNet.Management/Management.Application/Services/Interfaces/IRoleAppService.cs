@@ -43,5 +43,19 @@ namespace Management.Application
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteAsync(long id);
+
+        /// <summary>
+        /// 更新角色权限
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permissionCodes"></param>
+        /// <returns></returns>
+        Task UpdateRolePermissionAsync(long id,List<string> permissionCodes);
+
+        /// <summary>
+        /// 获取权限列表
+        /// </summary>
+        /// <returns></returns>
+        Task<List<PermissionDto>> GetPermissionsAsync();
     }
 }

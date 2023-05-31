@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Management.Application
+﻿namespace Management.Application
 {
     public class RoleDto:EntityDto<long>
     {
@@ -24,5 +18,9 @@ namespace Management.Application
         /// 描述
         /// </summary>
         public string? Description { get; set; }
+        /// <summary>
+        /// 权限Code数组
+        /// </summary>
+        public IReadOnlyCollection<string> PermissionCodes { get; set; } = new List<string>();
     }
 }

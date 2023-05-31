@@ -24,5 +24,6 @@ namespace Management.Application
         /// 排序
         /// </summary>
         public int SortOrder { get; set; }
+        public List<PermissionDto> Childrens { get; set; } = new List<PermissionDto>();
     }
 }

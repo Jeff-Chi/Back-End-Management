@@ -2,14 +2,14 @@
 
 namespace Management.Domain
 {
-    public static class BackEndManagementPermission
+    public sealed class Permissions
     {
         public const string BackEndManagement = "BackEndManagement";
 
-        public static class UserPermissionGroup
+        public static class UserManagement
         {
             [Description("用户管理")]
-            public const string GroupName = BackEndManagement + ".User";
+            public const string GroupName = BackEndManagement + ".UserManagement";
             [Description("查询")]
             public const string Query = GroupName + ".Query";
             [Description("创建")]
@@ -18,14 +18,14 @@ namespace Management.Domain
             public const string Update = GroupName + ".Update";
             [Description("删除")]
             public const string Delete = GroupName + ".Delete";
-            [Description("设置角色")]
-            public const string SetRole = GroupName + ".SetRole";
+            [Description("设置用户角色")]
+            public const string ChangeUserRole = GroupName + ".ChangeUserRole";
         }
 
-        public static class RolePermissionGroup
+        public static class RoleManagement
         {
             [Description("角色管理")]
-            public const string GroupName = BackEndManagement + ".Role";
+            public const string GroupName = BackEndManagement + ".RoleManagement";
             [Description("查询")]
             public const string Query = GroupName + ".Query";
             [Description("创建")]
@@ -34,8 +34,8 @@ namespace Management.Domain
             public const string Update = GroupName + ".Update";
             [Description("删除")]
             public const string Delete = GroupName + ".Delete";
-            [Description("设置权限")]
-            public const string SetPermission = GroupName + ".SetPermission";
+            [Description("设置角色权限")]
+            public const string ChangeRolePermission = GroupName + ".ChangeRolePermission";
         }
 
     }

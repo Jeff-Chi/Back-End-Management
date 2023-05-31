@@ -11,5 +11,9 @@ namespace Management.Domain
         Task<int> CountAsync(GetRolesInput input);
         Task<List<Role>> GetListAsync(GetRolesInput input);
         Task<List<Role>> GetListAsync(long userId);
+        Task<Role?> GetAsync(long id, GetRoleDetailsInput input);
+        Task<List<Permission>> GetPermissionsAsync();
+        Task<List<Permission>> GetPermissionsAsync(List<long> roleIds);
+
     }
 }

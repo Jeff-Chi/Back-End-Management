@@ -71,9 +71,34 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpDelete("{id:long}")]
-        public async Task DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             await _roleAppService.DeleteAsync(id);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// 更新角色权限
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permissionCodes"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{id:long/permission}")]
+        public async Task UpdateRolePermissionAsync(int id,List<string> permissionCodes)
+        {
+            await _roleAppService.UpdateRolePermissionAsync(id, permissionCodes);
+        }
+
+        /// <summary>
+        /// 获取权限列表
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("permissions")]
+        public async Task<List<PermissionDto>> GetPermissionsAsync()
+        {
+            return await _roleAppService.GetPermissionsAsync();
         }
     }
 }

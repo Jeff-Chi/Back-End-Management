@@ -64,7 +64,7 @@ namespace Management.Host.Controllers.Identity
         [HttpPut("{id:long}")]
         public async Task<ActionResult> UpdateAsync(int id, [FromBody] UpdateUserInputDto updateDto)
         {
-             await _userAppService.UpdateAsync(id, updateDto);
+            await _userAppService.UpdateAsync(id, updateDto);
             return NoContent();
         }
 
@@ -92,6 +92,18 @@ namespace Management.Host.Controllers.Identity
         }
 
         /// <summary>
+        /// 获取当前登录用户信息
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("current-user")]
+        public async Task<CurrentUserDto> GetCurrentUserAsync([FromServices] CurrentUserContext userContext)
+        {
+            return await _userAppService.GetCurrentUserAsync(userContext);
+        }
+
+
+        /// <summary>
         /// 获取用户的角色
         /// </summary>
         /// <param name="id"></param>
@@ -109,9 +121,11 @@ namespace Management.Host.Controllers.Identity
         /// <param name="id"></param>
         /// <param name="roleIds"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpPut("{id:long}/role")]
         public async Task<ActionResult> UpdateUserRolesAsync(long id, [FromBody] List<long> roleIds)
         {
+            await _userAppService.UpdateUserRolesAsync(id, roleIds);
             return NoContent();
         }
     }
