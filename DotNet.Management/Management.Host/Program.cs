@@ -123,4 +123,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// ef core auto save.
+app.UseMiddleware<EFCoreAutoSaveChangeMiddleware>();
+
 app.Run();
