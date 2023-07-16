@@ -126,7 +126,7 @@ app.UseCors("AllCrosDomainsPolicy");
 // static files
 app.UseMultipleStaticFiles(app.Environment);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
