@@ -6,14 +6,14 @@ namespace Management.Host.Extensions
 {
     public static class StaticFileExtensions
     {
-        public static IApplicationBuilder UseMultipleStaticFiles(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMultipleStaticFiles(this IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             FileUploadOptions fileUploadOptions = app.ApplicationServices.GetService<IOptions<FileUploadOptions>>()!.Value;
 
             List<(string, string)> staticFileList = new List<(string, string)>();
 
-            staticFileList.Add(ValueTuple.Create(Path.Combine(fileUploadOptions.StoreRootDirName, fileUploadOptions.RootDirName), $"/{fileUploadOptions.RootDirName}"));
+            staticFileList.Add(ValueTuple.Create(Path.Combine(env.ContentRootPath, fileUploadOptions.StoreRootDirName, fileUploadOptions.RootDirName), $"/{fileUploadOptions.RootDirName}"));
             foreach (var item in staticFileList)
             {
                 Directory.CreateDirectory(item.Item1);

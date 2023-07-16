@@ -134,6 +134,15 @@ namespace Management.Application
             return currentUserDto;
         }
 
+        
+        public async Task<JwtTokenDto> RefreshTokenAsync(string refreshToken)
+        {
+            var userId = _jwtTokenService.GetUserIdByRefreshToken(refreshToken);
+            var user = await _userRepository.GetAsync(userId);
+            ValidateNotNull(user);
+            return CreateTokenDto(user!);
+        }
+
         #region private methods
 
         private JwtTokenDto CreateTokenDto(User user)

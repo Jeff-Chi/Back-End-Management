@@ -40,6 +40,90 @@ namespace Managemrnt.EFCore.Migrations
                     b.HasKey("Code");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement",
+                            Name = "用户管理",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement.Query",
+                            Name = "查询",
+                            ParentCode = "BackEndManagement.UserManagement",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement.Create",
+                            Name = "创建",
+                            ParentCode = "BackEndManagement.UserManagement",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement.Update",
+                            Name = "更新",
+                            ParentCode = "BackEndManagement.UserManagement",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement.Delete",
+                            Name = "删除",
+                            ParentCode = "BackEndManagement.UserManagement",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.UserManagement.ChangeUserRole",
+                            Name = "设置用户角色",
+                            ParentCode = "BackEndManagement.UserManagement",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement",
+                            Name = "角色管理",
+                            SortOrder = 7
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement.Query",
+                            Name = "查询",
+                            ParentCode = "BackEndManagement.RoleManagement",
+                            SortOrder = 8
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement.Create",
+                            Name = "创建",
+                            ParentCode = "BackEndManagement.RoleManagement",
+                            SortOrder = 9
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement.Update",
+                            Name = "更新",
+                            ParentCode = "BackEndManagement.RoleManagement",
+                            SortOrder = 10
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement.Delete",
+                            Name = "删除",
+                            ParentCode = "BackEndManagement.RoleManagement",
+                            SortOrder = 11
+                        },
+                        new
+                        {
+                            Code = "BackEndManagement.RoleManagement.ChangeRolePermission",
+                            Name = "设置角色权限",
+                            ParentCode = "BackEndManagement.RoleManagement",
+                            SortOrder = 12
+                        });
                 });
 
             modelBuilder.Entity("Management.Domain.Role", b =>
@@ -62,6 +146,12 @@ namespace Managemrnt.EFCore.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsSuperAdmin")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("ModificationTime")
                         .HasColumnType("datetime(6)");

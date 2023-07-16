@@ -1,9 +1,7 @@
 ﻿using Management.Application;
 using Management.Infrastructure.FileUpload;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.IO;
 
 namespace Management.Host.Controllers.Infrastructure
 {

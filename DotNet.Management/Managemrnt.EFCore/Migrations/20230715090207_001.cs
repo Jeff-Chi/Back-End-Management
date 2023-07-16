@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Managemrnt.EFCore.Migrations
 {
     /// <inheritdoc />
-    public partial class _010_AddEntities : Migration
+    public partial class _001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,8 +45,10 @@ namespace Managemrnt.EFCore.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Code = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsSuperAdmin = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatorId = table.Column<long>(type: "bigint", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifierId = table.Column<long>(type: "bigint", nullable: true),
@@ -138,6 +142,25 @@ namespace Managemrnt.EFCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Code", "Name", "ParentCode", "SortOrder" },
+                values: new object[,]
+                {
+                    { "BackEndManagement.RoleManagement", "角色管理", null, 7 },
+                    { "BackEndManagement.RoleManagement.ChangeRolePermission", "设置角色权限", "BackEndManagement.RoleManagement", 12 },
+                    { "BackEndManagement.RoleManagement.Create", "创建", "BackEndManagement.RoleManagement", 9 },
+                    { "BackEndManagement.RoleManagement.Delete", "删除", "BackEndManagement.RoleManagement", 11 },
+                    { "BackEndManagement.RoleManagement.Query", "查询", "BackEndManagement.RoleManagement", 8 },
+                    { "BackEndManagement.RoleManagement.Update", "更新", "BackEndManagement.RoleManagement", 10 },
+                    { "BackEndManagement.UserManagement", "用户管理", null, 1 },
+                    { "BackEndManagement.UserManagement.ChangeUserRole", "设置用户角色", "BackEndManagement.UserManagement", 6 },
+                    { "BackEndManagement.UserManagement.Create", "创建", "BackEndManagement.UserManagement", 3 },
+                    { "BackEndManagement.UserManagement.Delete", "删除", "BackEndManagement.UserManagement", 5 },
+                    { "BackEndManagement.UserManagement.Query", "查询", "BackEndManagement.UserManagement", 2 },
+                    { "BackEndManagement.UserManagement.Update", "更新", "BackEndManagement.UserManagement", 4 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermissions_PermissionCode",

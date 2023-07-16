@@ -56,9 +56,9 @@ namespace Management.Host.Controllers.Identity
         /// <param name="id"></param>
         /// <param name="updateDto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [Authorize]
         [HttpPut("{id:long}")]
-        public async Task<ActionResult> UpdateAsync(int id, [FromBody] CreateRoleInputDto updateDto)
+        public async Task<ActionResult> UpdateAsync(long id, [FromBody] CreateRoleInputDto updateDto)
         {
             await _roleAppService.UpdateAsync(id, updateDto);
             return NoContent();
@@ -84,7 +84,7 @@ namespace Management.Host.Controllers.Identity
         /// <param name="permissionCodes"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPut("{id:long/permission}")]
+        [HttpPut("{id:long}/permission")]
         public async Task UpdateRolePermissionAsync(int id,List<string> permissionCodes)
         {
             await _roleAppService.UpdateRolePermissionAsync(id, permissionCodes);

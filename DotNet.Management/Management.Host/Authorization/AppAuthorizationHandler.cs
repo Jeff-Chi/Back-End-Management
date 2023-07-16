@@ -5,10 +5,10 @@ namespace Management.Host
 {
     public class AppAuthorizationHandler : AuthorizationHandler<AppAuthorizationRequirement>
     {
-        private readonly ICurrentUserContext _currentUserContext;
+        //private readonly ICurrentUserContext _currentUserContext;
         public AppAuthorizationHandler(ICurrentUserContext currentUserContext)
         {
-            _currentUserContext = currentUserContext;
+            //_currentUserContext = currentUserContext;
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AppAuthorizationRequirement requirement)
         {
@@ -18,13 +18,13 @@ namespace Management.Host
             }
             else
             {
-                if (_currentUserContext.PermissionCodes.Any())
-                {
-                    if (_currentUserContext.PermissionCodes.Contains(requirement.PermissionCode))
-                    {
-                        context.Succeed(requirement);
-                    }
-                }
+                //if (_currentUserContext.PermissionCodes.Any())
+                //{
+                //    if (_currentUserContext.PermissionCodes.Contains(requirement.PermissionCode))
+                //    {
+                //        context.Succeed(requirement);
+                //    }
+                //}
                 //var permissions = requirement.PermissionCode.Split('|', StringSplitOptions.RemoveEmptyEntries);
                 //foreach (var permission in permissions)
                 //{

@@ -9,25 +9,27 @@ namespace Management.Host
         public static void RegisterServices(this IServiceCollection services)
         {
             string path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
-            var assemblies = Directory.GetFiles(path, "*.dll").Select(Assembly.LoadFrom).ToArray();
 
-            var allTypes = assemblies.SelectMany(a => a.GetTypes());
+            var referencedAssemblies = Directory.GetFiles(path, "*.dll").Select(Assembly.LoadFrom).ToArray();
+
+            var allTypes = referencedAssemblies.SelectMany(a => a.GetTypes());
 
             #region interfaces
             // 实现接口方式注入服务
-            var interFaceTypes = allTypes.Where(t => t.IsAssignableFrom(typeof(IDependency)) && t.IsClass && !t.IsAbstract && !t.IsGenericType);
+            var interFaceTypes = allTypes.Where(t => typeof(IDependency).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && !t.IsGenericType);
+            //var interFaceTypes = allTypes.Where(t => t.IsAssignableFrom(typeof(IScopedDependency)) && t.IsClass && !t.IsAbstract && !t.IsGenericType).ToList();// && t.IsClass && !t.IsAbstract && !t.IsGenericType);
             foreach (var type in interFaceTypes)
             {
                 Type[] interfaceTypes = type.GetInterfaces();
 
-                var types = interfaceTypes.Where(t => t != typeof(IDependency) 
-                    && t != typeof(ISingletonDependency) 
-                    && t != typeof(IScopedDependency) 
+                var types = interfaceTypes.Where(t => t != typeof(IDependency)
+                    && t != typeof(ISingletonDependency)
+                    && t != typeof(IScopedDependency)
                     && t != typeof(ITransientDependency)).ToArray();
 
                 if (interfaceTypes.Contains(typeof(IScopedDependency)))
                 {
-                    AddScoped(services,type, types);
+                    AddScoped(services, type, types);
                 }
                 else if (interfaceTypes.Contains(typeof(ISingletonDependency)))
                 {

@@ -4,6 +4,7 @@ using Management.Domain;
 using Management.Host;
 using Management.Host.Extensions;
 using Management.Host.Middlewares;
+using Management.Infrastructure;
 using Management.Infrastructure.FileUpload;
 using Managemrnt.EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -76,15 +77,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 #endregion
 
-
-#region Authorization
-
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, AppAuthorizationPolicyProvider>();
-
-builder.Services.AddScoped<IAuthorizationHandler, AppAuthorizationHandler>();
-
-#endregion
-
 #region 批量服务注入
 
 builder.Services.RegisterServices();
@@ -95,6 +87,27 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 
 #endregion
 
+#region Authorization
+
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, AppAuthorizationPolicyProvider>();
+
+builder.Services.AddScoped<IAuthorizationHandler, AppAuthorizationHandler>();
+
+#endregion
+
+//builder.Services.AddScoped<ICurrentUserContext, CurrentUserContext>();
+
+#region aes
+
+// TODO: Key放到 appsettings
+builder.Services.AddSingleton<IAesProtector>(sp => new AesProtector("12346iid882uabcd"));
+
+#endregion
+
+// auto mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -111,7 +124,7 @@ app.UseDownFilesMiddleware(Directory.GetCurrentDirectory());
 app.UseCors("AllCrosDomainsPolicy");
 
 // static files
-app.UseMultipleStaticFiles();
+app.UseMultipleStaticFiles(app.Environment);
 
 app.UseHttpsRedirection();
 

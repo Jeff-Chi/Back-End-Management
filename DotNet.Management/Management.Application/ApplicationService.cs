@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Management.Application
 {
-    public class ApplicationService: IApplicationService//:IScopedDependency
+    public class ApplicationService: IApplicationService
     {
         protected long GenerateId()
         {

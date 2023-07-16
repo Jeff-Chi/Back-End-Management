@@ -1,7 +1,6 @@
 ﻿using Management.Application;
 using Management.Domain;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,7 +59,7 @@ namespace Management.Host.Controllers.Identity
         /// <param name="id"></param>
         /// <param name="updateDto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [Authorize]
         [HttpPut("{id:long}")]
         public async Task<ActionResult> UpdateAsync(int id, [FromBody] UpdateUserInputDto updateDto)
         {
@@ -127,6 +126,17 @@ namespace Management.Host.Controllers.Identity
         {
             await _userAppService.UpdateUserRolesAsync(id, roleIds);
             return NoContent();
+        }
+
+        /// <summary>
+        /// 使用refreshToken 刷新用户登录状态,重新获取token
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns>token</returns>
+        [HttpGet("refresh-token")]
+        public async Task<ActionResult<JwtTokenDto>> RefreshTokenAsync(string refreshToken)
+        {
+            return Ok(await _userAppService.RefreshTokenAsync(refreshToken));
         }
     }
 }

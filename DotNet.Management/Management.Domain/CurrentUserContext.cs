@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Management.Domain
+﻿namespace Management.Domain
 {
     /// <summary>
     /// 当前登录用户
     /// </summary>
-    public class CurrentUserContext: ICurrentUserContext
+    public class CurrentUserContext : ICurrentUserContext, IScopedDependency
     {
         public long? Id { get; private set; }
 
@@ -30,9 +24,9 @@ namespace Management.Domain
         }
 
         public void SetValue(
-            long? id, 
-            string? userName, 
-            HashSet<string> permissionCods, 
+            long? id,
+            string? userName,
+            HashSet<string> permissionCods,
             HashSet<long> roleIds)
         {
             Id = id;
@@ -41,6 +35,6 @@ namespace Management.Domain
             RoleIds = roleIds;
         }
 
-        
+
     }
 }
