@@ -24,7 +24,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageResultDto<UserDto>>> GetListAsync(GetUsersInputDto dto)
+        public async Task<ActionResult<PageResultDto<UserDto>>> GetListAsync([FromQuery]GetUsersInputDto dto)
         {
             return await _userAppService.GetListAsync(dto);
         }

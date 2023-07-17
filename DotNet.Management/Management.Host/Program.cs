@@ -10,6 +10,7 @@ using Managemrnt.EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -68,7 +69,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JwtToken:Issuer"],
             ValidAudience = builder.Configuration["JwtToken:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtToken:SecurityKey"]!)),
             ClockSkew = TimeSpan.FromMinutes(1) // 偏差
         };
 
@@ -116,6 +117,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerMiddleware();
 }
+
+app.UseSwaggerMiddleware();
+
 
 //读取图片的中间件
 app.UseDownFilesMiddleware(Directory.GetCurrentDirectory());
