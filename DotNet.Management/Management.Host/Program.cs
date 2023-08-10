@@ -10,12 +10,19 @@ using Managemrnt.EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration
+    .ReadFrom.Configuration(hostingContext.Configuration)
+    .Enrich.FromLogContext();
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -33,7 +40,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHealthChecks();
 
-// ConfigureApiBehaviorOptions
+// 配置模型校验返回错误格式
 builder.Services.ConfigureApiBehaviorOptions();
 
 // Cors
@@ -131,6 +138,10 @@ app.UseCors("AllCrosDomainsPolicy");
 app.UseMultipleStaticFiles(app.Environment);
 
 //app.UseHttpsRedirection();
+
+//app.UseSerilogRequestLogging();
+
+app.UseAppExceptionHandler(app.Environment);
 
 app.UseAuthentication();
 

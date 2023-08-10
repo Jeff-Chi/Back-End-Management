@@ -1,9 +1,7 @@
 ﻿using Management.Application;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Net;
-using System.Text;
 
 namespace Management.Host
 {
@@ -59,6 +57,10 @@ namespace Management.Host
             });
         }
 
+        /// <summary>
+        /// ConfigureApiBehaviorOptions
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureApiBehaviorOptions(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
@@ -67,6 +69,11 @@ namespace Management.Host
             });
         }
 
+        /// <summary>
+        /// 配置模型校验错误返回格式
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <returns></returns>
         private static IActionResult ModelResponseFactory(ActionContext actionContext)
         {
             var errorResponse = new ApiErrorResponse()
@@ -74,8 +81,6 @@ namespace Management.Host
                 Code = StatusCodes.Status422UnprocessableEntity.ToString(),
                 Message = "One or more validation errors occurred"
             };
-
-            //illegal request parameters
 
             var validationErrors = new List<ValidationErrorInfo>();
 
