@@ -1,6 +1,5 @@
 ﻿using Management.Application;
 using Management.Domain;
-using Management.Host.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
