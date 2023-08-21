@@ -1,5 +1,6 @@
 ﻿using Management.Application;
 using Management.Domain;
+using Management.Host.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -85,6 +86,7 @@ namespace Management.Host.Controllers.Identity
         /// <param name="loginDto"></param>
         /// <returns></returns>
         [HttpPost("login")]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<JwtTokenDto> LoginAsync(UserLoginDto loginDto)
         {
             return await _userAppService.LoginAsync(loginDto);
