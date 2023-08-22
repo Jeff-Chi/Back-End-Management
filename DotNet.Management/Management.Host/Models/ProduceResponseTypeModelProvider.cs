@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Routing;
 
@@ -37,6 +38,9 @@ namespace Management.Host
 
         public void OnProvidersExecuting(ApplicationModelProviderContext context)
         {
+            // reference:
+            // https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/application-model?view=aspnetcore-7.0#iapplicationmodelprovider
+            // https://stackoverflow.com/questions/58047020/net-core-api-make-producesresponsetype-global-parameter-or-automate
             foreach (ControllerModel controller in context.Result.Controllers)
             {
                 foreach (ActionModel action in controller.Actions)
@@ -50,19 +54,51 @@ namespace Management.Host
                         }
                     }
 
-                    var methodVerbs = action.Attributes.OfType<HttpMethodAttribute>().SelectMany(x => x.HttpMethods).Distinct();
+                    var method = action.Attributes.OfType<HttpMethodAttribute>().SelectMany(x => x.HttpMethods).FirstOrDefault();
+
+                    var hasAuthorize = action.Attributes.OfType<AuthorizeAttribute>().Any();
+
+                    var has200OK = action.Attributes.OfType<ProducesResponseTypeAttribute>()
+                        .Where(t => t.StatusCode == StatusCodes.Status200OK).Any();
+
                     bool actionParametersExist = action.Parameters.Any();
 
-                    AddUniversalStatusCodes(action, returnType);
+                    //if (actionParametersExist == true)
+                    //{
+                    //    AddProducesResponseTypeAttribute(action, null, 404);
+                    //}
 
-                    if (actionParametersExist == true)
+                    // 依据http method 添加对应的状态编码
+                    if (!string.IsNullOrWhiteSpace(method))
                     {
-                        AddProducesResponseTypeAttribute(action, null, 404);
+                        switch (method)
+                        {
+                            case "GET":
+                                AddGetStatusCodes(action, returnType);
+                                break;
+                            case "POST":
+                                if (!has200OK)
+                                {
+                                    AddPostStatusCodes(action, returnType, actionParametersExist);
+                                }
+                                break;
+                            case "PUT":
+                            case "DELETE":
+                                AddPutOrDeleteStatusCodes(action);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    if (methodVerbs.Contains("POST"))
+
+                    if (hasAuthorize)
                     {
-                        AddPostStatusCodes(action, returnType, actionParametersExist);
+                        AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized);
+                        AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), StatusCodes.Status403Forbidden);
                     }
+
+                    // 通用状态编码
+                    AddUniversalStatusCodes(action, returnType);
                 }
             }
         }
@@ -81,18 +117,29 @@ namespace Management.Host
 
         public void AddUniversalStatusCodes(ActionModel action, Type? returnType)
         {
-            AddProducesResponseTypeAttribute(action, returnType, 200);
-            AddProducesResponseTypeAttribute(action, null, 500);
+            AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), StatusCodes.Status400BadRequest);
+            AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), StatusCodes.Status422UnprocessableEntity);
+            AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError);
         }
 
-        public void AddPostStatusCodes(ActionModel action, Type returnType, bool actionParametersExist)
+        public void AddGetStatusCodes(ActionModel action, Type? returnType)
         {
-            AddProducesResponseTypeAttribute(action, returnType, 201);
-            AddProducesResponseTypeAttribute(action, returnType, 400);
-            if (actionParametersExist == false)
-            {
-                AddProducesResponseTypeAttribute(action, null, 404);
-            }
+            AddProducesResponseTypeAttribute(action, returnType, StatusCodes.Status200OK);
+        }
+
+        public void AddPostStatusCodes(ActionModel action, Type? returnType, bool actionParametersExist)
+        {
+            AddProducesResponseTypeAttribute(action, returnType, StatusCodes.Status201Created);
+            //AddProducesResponseTypeAttribute(action, typeof(ApiErrorResponse), 400);
+            //if (actionParametersExist == false)
+            //{
+            //    AddProducesResponseTypeAttribute(action, null, 404);
+            //}
+        }
+
+        public void AddPutOrDeleteStatusCodes(ActionModel action)
+        {
+            AddProducesResponseTypeAttribute(action, null, 204);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Management.Host.Controllers.Identity
         /// <param name="loginDto"></param>
         /// <returns></returns>
         [HttpPost("login")]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<JwtTokenDto> LoginAsync(UserLoginDto loginDto)
         {
             return await _userAppService.LoginAsync(loginDto);
