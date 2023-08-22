@@ -121,6 +121,8 @@ builder.Services.AddMemoryCache();
 
 builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
 
+// builder.Services.BuildServiceProvider();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -157,5 +159,14 @@ app.MapControllers();
 
 // ef core auto save.
 app.UseMiddleware<EFCoreAutoSaveChangeMiddleware>();
+
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+
+    var seederService = services.GetRequiredService<IAppSeederService>();
+    seederService.SeedAsync();
+}
 
 app.Run();

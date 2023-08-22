@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Management.Domain;
-using System.ComponentModel;
+using Management.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -57,6 +57,8 @@ namespace Management.Application
         {
             User user = _mapper.Map(input, new User(GenerateId()));
 
+            user.Password = EncryptHelper.MD5Encrypt(user.Password);
+
             await _userRepository.InsertAsync(user, true);
 
             return _mapper.Map<UserDto>(user);
@@ -83,7 +85,7 @@ namespace Management.Application
 
         public async Task<JwtTokenDto> LoginAsync(UserLoginDto userLoginDto)
         {
-            User? user = await _userRepository.GetAsync(userLoginDto.UserName, userLoginDto.Password);
+            User? user = await _userRepository.GetAsync(userLoginDto.UserName, EncryptHelper.MD5Encrypt(userLoginDto.Password));
             if (user == null)
             {
                 throw new BusinessException("用户名或密码错误!");
