@@ -22,11 +22,11 @@ namespace Managemrnt.EFCore
         //=> _changeTracker ??= InternalServiceProvider.GetRequiredService<IChangeTrackerFactory>().Create();
 
         private ICurrentUserContext? _currentUserContext;
-        public ICurrentUserContext CurrentUserContext 
+        public ICurrentUserContext CurrentUserContext
         {
             get
             {
-                if(_currentUserContext == null && this is IInfrastructure<IServiceProvider> serviceProvider)
+                if (_currentUserContext == null && this is IInfrastructure<IServiceProvider> serviceProvider)
                 {
                     _currentUserContext = serviceProvider.GetService<CurrentUserContext>();
                 }
@@ -107,11 +107,54 @@ namespace Managemrnt.EFCore
 
             #endregion
 
+            #region Logs
+
+            modelBuilder.Entity<LoginLog>(b =>
+            {
+                // properties
+                b.Property(l => l.UserName).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(l => l.NickName).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(l => l.SourceIpAddress).HasMaxLength(Constants.MaxIPLength).IsRequired();
+                b.Property(l => l.Platform).HasMaxLength(Constants.MaxDescriptionLength);
+                b.Property(l => l.Brower).HasMaxLength(Constants.MaxDescriptionLength);
+
+                // relations
+
+                // indexs
+                b.HasIndex(l => l.UserName);
+                b.HasIndex(l => l.UserId);
+            });
+
+            modelBuilder.Entity<AuditLog>(b =>
+            {
+                // properties
+                b.Property(l => l.UserName).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(l => l.NickName).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(l => l.SourceIpAddress).HasMaxLength(Constants.MaxIPLength).IsRequired();
+                b.Property(l => l.Platform).HasMaxLength(Constants.MaxDescriptionLength);
+                b.Property(l => l.Brower).HasMaxLength(Constants.MaxDescriptionLength);
+                b.Property(l => l.Url).IsRequired();
+                b.Property(l => l.Controller).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.Action).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.Body);
+                b.Property(l => l.QueryString);
+                b.Property(l => l.StatuCode).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                // relations
+
+                // indexs
+                b.HasIndex(l => l.UserName);
+                b.HasIndex(l => l.UserId);
+                b.HasIndex(l => l.StatuCode);
+            });
+
+            #endregion
+
+
             #region Seeder
 
             modelBuilder.Entity<Permission>().HasData(
                 new Permission { Code = UserManagement.GroupName, Name = "用户管理", SortOrder = 1 },
-                new Permission { Code = UserManagement.Query, Name = "查询", SortOrder = 2,ParentCode = UserManagement.GroupName },
+                new Permission { Code = UserManagement.Query, Name = "查询", SortOrder = 2, ParentCode = UserManagement.GroupName },
                 new Permission { Code = UserManagement.Create, Name = "创建", SortOrder = 3, ParentCode = UserManagement.GroupName },
                 new Permission { Code = UserManagement.Update, Name = "更新", SortOrder = 4, ParentCode = UserManagement.GroupName },
                 new Permission { Code = UserManagement.Delete, Name = "删除", SortOrder = 5, ParentCode = UserManagement.GroupName },
@@ -162,9 +205,11 @@ namespace Managemrnt.EFCore
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<LoginLog> LoginLogs { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
 
         #endregion
-        
+
         private void SetCreationProperties(object entity)
         {
             if (entity is ICreationAuditedObject creationAuditedObject)

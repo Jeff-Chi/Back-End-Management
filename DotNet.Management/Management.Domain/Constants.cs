@@ -13,6 +13,7 @@ namespace Management.Domain
         public const int MaxDescriptionLength = 100;
         public const int MaxPathLength = 300;
         public const int MaxMobilePhoneLength = 20;
-        public const int MaxEmailLength = 20;
+        public const int MaxEmailLength = 100;
+        public const int MaxIPLength = 50;
     }
 }
