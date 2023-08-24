@@ -47,6 +47,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<User>(b =>
             {
+                b.ToTable();
+
                 // properties
                 b.Property(u => u.UserName).HasMaxLength(Constants.MaxNameLength).IsRequired();
                 b.Property(u => u.NickName).HasMaxLength(Constants.MaxNameLength).IsRequired();
@@ -64,6 +66,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<Role>(b =>
             {
+                b.ToTable();
+
                 // properties
                 b.Property(r => r.Name).HasMaxLength(Constants.MaxNameLength).IsRequired();
                 b.Property(r => r.Code).HasMaxLength(Constants.MaxCode).IsRequired();
@@ -72,6 +76,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<UserRole>(b =>
             {
+                b.ToTable();
+
                 // Key
                 b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
@@ -86,6 +92,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<Permission>(b =>
             {
+                b.ToTable();
+
                 b.HasKey(p => p.Code);
 
                 // properties
@@ -97,6 +105,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<RolePermission>(b =>
             {
+                b.ToTable();
+
                 // Key
                 b.HasKey(rp => new { rp.RoleId, rp.PermissionCode });
 
@@ -111,6 +121,8 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<LoginLog>(b =>
             {
+                b.ToTable();
+
                 // properties
                 b.Property(l => l.UserName).HasMaxLength(Constants.MaxNameLength).IsRequired();
                 b.Property(l => l.NickName).HasMaxLength(Constants.MaxNameLength).IsRequired();
@@ -127,24 +139,26 @@ namespace Managemrnt.EFCore
 
             modelBuilder.Entity<AuditLog>(b =>
             {
+                b.ToTable();
+
                 // properties
-                b.Property(l => l.UserName).HasMaxLength(Constants.MaxNameLength).IsRequired();
-                b.Property(l => l.NickName).HasMaxLength(Constants.MaxNameLength).IsRequired();
+                b.Property(l => l.UserName).HasMaxLength(Constants.MaxNameLength);
+                b.Property(l => l.NickName).HasMaxLength(Constants.MaxNameLength);
                 b.Property(l => l.SourceIpAddress).HasMaxLength(Constants.MaxIPLength).IsRequired();
                 b.Property(l => l.Platform).HasMaxLength(Constants.MaxDescriptionLength);
                 b.Property(l => l.Brower).HasMaxLength(Constants.MaxDescriptionLength);
-                b.Property(l => l.Url).IsRequired();
                 b.Property(l => l.Controller).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
                 b.Property(l => l.Action).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
-                b.Property(l => l.Body);
-                b.Property(l => l.QueryString);
-                b.Property(l => l.StatuCode).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.Action).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.RequestPath).IsRequired();
+                b.Property(l => l.RequestMethod).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.RequestContentType).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
+                b.Property(l => l.ResponseStatus).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
                 // relations
 
                 // indexs
                 b.HasIndex(l => l.UserName);
                 b.HasIndex(l => l.UserId);
-                b.HasIndex(l => l.StatuCode);
             });
 
             #endregion
