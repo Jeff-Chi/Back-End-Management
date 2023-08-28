@@ -14,7 +14,7 @@ namespace Management.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<PageResultDto<UserDto>> GetListAsync(GetUsersInputDto input);
+        Task<PageResultDto<UserDto>> GetListAsync(GetUsersDto input);
 
         /// <summary>
         /// 获取指定用户
@@ -28,7 +28,7 @@ namespace Management.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<UserDto> CreateAsync(CreateUserInputDto input);
+        Task<UserDto> CreateAsync(CreateUserDto input);
 
         /// <summary>
         /// 更新用户
@@ -36,7 +36,7 @@ namespace Management.Application
         /// <param name="id"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task UpdateAsync(long id, UpdateUserInputDto input);
+        Task UpdateAsync(long id, UpdateUserDto input);
 
         /// <summary>
         /// 删除用户

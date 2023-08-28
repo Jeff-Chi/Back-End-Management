@@ -13,7 +13,7 @@ namespace Management.Application
             _roleRepository = roleRepository;
             _mapper = mapper;
         }
-        public async Task<RoleDto> CreateAsync(CreateRoleInputDto input)
+        public async Task<RoleDto> CreateAsync(CreateRoleDto input)
         {
             int count = await _roleRepository.CountAsync(new GetRolesInput { Code = input.Code });
             if (count > 0)
@@ -45,7 +45,7 @@ namespace Management.Application
             return dto;
         }
 
-        public async Task<PageResultDto<RoleDto>> GetListAsync(GetRolesInputDto inputDto)
+        public async Task<PageResultDto<RoleDto>> GetListAsync(GetRolesDto inputDto)
         {
             var input = _mapper.Map<GetRolesInput>(inputDto);
             input.IncludeRolePermission = true;
@@ -72,7 +72,7 @@ namespace Management.Application
             };
         }
 
-        public async Task UpdateAsync(long id, CreateRoleInputDto input)
+        public async Task UpdateAsync(long id, CreateRoleDto input)
         {
             var role = await _roleRepository.GetAsync(id);
             var roles = await _roleRepository.GetListAsync(new GetRolesInput { Code = input.Code,MaxResultCount = 2 });

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Management.Application
 {
-    public class CreateUserInputDto
+    public class CreateUserDto
     {
         /// <summary>
         /// 用户名
@@ -24,7 +24,7 @@ namespace Management.Application
         public string Password { get; set; } = string.Empty;
     }
 
-    public class UpdateUserInputDto
+    public class UpdateUserDto
     {
         /// <summary>
         /// 昵称

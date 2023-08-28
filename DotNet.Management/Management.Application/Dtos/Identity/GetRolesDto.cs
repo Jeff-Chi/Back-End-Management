@@ -2,7 +2,7 @@
 
 namespace Management.Application
 {
-    public class GetRolesInputDto:PageDto
+    public class GetRolesDto:PageDto
     {
         public string? Name { get; set; }
         public bool? IsDisabled { get; set; }

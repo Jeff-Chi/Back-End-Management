@@ -21,7 +21,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageResultDto<RoleDto>>> GetListAsync(GetRolesInputDto dto)
+        public async Task<ActionResult<PageResultDto<RoleDto>>> GetListAsync(GetRolesDto dto)
         {
             return await _roleAppService.GetListAsync(dto);
         }
@@ -45,7 +45,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<RoleDto>> CreateAsync([FromBody] CreateRoleInputDto createDto)
+        public async Task<ActionResult<RoleDto>> CreateAsync([FromBody] CreateRoleDto createDto)
         {
             return await _roleAppService.CreateAsync(createDto);
         }
@@ -58,7 +58,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpPut("{id:long}")]
-        public async Task<ActionResult> UpdateAsync(long id, [FromBody] CreateRoleInputDto updateDto)
+        public async Task<ActionResult> UpdateAsync(long id, [FromBody] CreateRoleDto updateDto)
         {
             await _roleAppService.UpdateAsync(id, updateDto);
             return NoContent();

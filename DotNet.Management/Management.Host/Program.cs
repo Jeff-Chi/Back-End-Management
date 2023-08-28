@@ -53,6 +53,7 @@ builder.Services.AddCors(options =>
         builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
+
 builder.Services.AddSwaggerService();
 
 #region options

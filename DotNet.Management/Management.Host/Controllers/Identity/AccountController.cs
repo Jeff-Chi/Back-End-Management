@@ -24,7 +24,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageResultDto<UserDto>>> GetListAsync([FromQuery]GetUsersInputDto dto)
+        public async Task<ActionResult<PageResultDto<UserDto>>> GetListAsync([FromQuery]GetUsersDto dto)
         {
             return await _userAppService.GetListAsync(dto);
         }
@@ -48,7 +48,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateAsync([FromBody] CreateUserInputDto createDto)
+        public async Task<ActionResult<UserDto>> CreateAsync([FromBody] CreateUserDto createDto)
         {
             return await _userAppService.CreateAsync(createDto);
         }
@@ -61,7 +61,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpPut("{id:long}")]
-        public async Task<ActionResult> UpdateAsync(int id, [FromBody] UpdateUserInputDto updateDto)
+        public async Task<ActionResult> UpdateAsync(int id, [FromBody] UpdateUserDto updateDto)
         {
             await _userAppService.UpdateAsync(id, updateDto);
             return NoContent();

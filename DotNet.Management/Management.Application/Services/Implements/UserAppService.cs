@@ -24,7 +24,7 @@ namespace Management.Application
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<PageResultDto<UserDto>> GetListAsync(GetUsersInputDto inputDto)
+        public async Task<PageResultDto<UserDto>> GetListAsync(GetUsersDto inputDto)
         {
             var input = _mapper.Map<GetUsersInput>(inputDto);
             int count = await _userRepository.CountAsync(input);
@@ -53,7 +53,7 @@ namespace Management.Application
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<UserDto> CreateAsync(CreateUserInputDto input)
+        public async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             User user = _mapper.Map(input, new User(GenerateId()));
 
@@ -64,7 +64,7 @@ namespace Management.Application
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task UpdateAsync(long id, UpdateUserInputDto input)
+        public async Task UpdateAsync(long id, UpdateUserDto input)
         {
             var user = await _userRepository.GetAsync(id);
 
@@ -93,6 +93,7 @@ namespace Management.Application
 
             user.LastLoginTime = DateTime.Now;
             await _userRepository.UpdateAsync(user, true);
+            // TODO: LoginLog
             return CreateTokenDto(user);
         }
 

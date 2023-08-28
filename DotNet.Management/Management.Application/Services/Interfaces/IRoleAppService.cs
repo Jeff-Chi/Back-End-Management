@@ -13,7 +13,7 @@ namespace Management.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<PageResultDto<RoleDto>> GetListAsync(GetRolesInputDto input);
+        Task<PageResultDto<RoleDto>> GetListAsync(GetRolesDto input);
 
         /// <summary>
         /// 获取指定角色
@@ -27,7 +27,7 @@ namespace Management.Application
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<RoleDto> CreateAsync(CreateRoleInputDto input);
+        Task<RoleDto> CreateAsync(CreateRoleDto input);
 
         /// <summary>
         /// 更新角色
@@ -35,7 +35,7 @@ namespace Management.Application
         /// <param name="id"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task UpdateAsync(long id, CreateRoleInputDto input);
+        Task UpdateAsync(long id, CreateRoleDto input);
 
         /// <summary>
         /// 删除角色

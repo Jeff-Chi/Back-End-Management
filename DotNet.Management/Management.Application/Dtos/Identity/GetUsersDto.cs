@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Management.Application
 {
-    public class GetUsersInputDto: PageDto
+    public class GetUsersDto: PageDto
     {
         /// <summary>
         /// 用户名

@@ -9,11 +9,16 @@ namespace Management.Application
         {
             #region Identity
 
+            CreateMap<GetUsersDto, GetUsersInput>();
             CreateMap<User, UserDto>();
-            CreateMap<CreateUserInputDto, User>();
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
 
+            CreateMap<GetRolesDto, GetRolesInput>();
             CreateMap<Role, RoleDto>();
-            CreateMap<CreateRoleInputDto, Role>();
+            CreateMap<CreateRoleDto, Role>();
+            CreateMap<UpdateRoleDto, Role>();
+
 
             CreateMap<Permission, PermissionDto>();
 

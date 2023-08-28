@@ -16,6 +16,26 @@ namespace Magament.Host
                     Description = "后台管理Api文档v1"
                 });
 
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "JSON Web Token to access resources. Example: Bearer {token}",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new [] { string.Empty }
+                    }
+                });
+
+
                 var file = Path.Combine(AppContext.BaseDirectory, "Management.Host.xml");
                 option.IncludeXmlComments(file, true);
             });
