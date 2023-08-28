@@ -71,7 +71,7 @@ namespace Management.Application
             user.Password = EncryptHelper.MD5Encrypt("season.2023");
             user.Email = "asnotracking@gmail.com";
 
-            var role = _dbContext.Roles.Where(r => r.Code == "Admin").FirstAsync();
+            var role = await _dbContext.Roles.Where(r => r.Code == "Admin").FirstAsync();
 
             user.UserRoles = new List<UserRole>()
             {
@@ -79,6 +79,7 @@ namespace Management.Application
             };
 
             await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

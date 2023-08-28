@@ -28,7 +28,7 @@ namespace Managemrnt.EFCore
             {
                 if (_currentUserContext == null && this is IInfrastructure<IServiceProvider> serviceProvider)
                 {
-                    _currentUserContext = serviceProvider.GetService<CurrentUserContext>();
+                    _currentUserContext = serviceProvider.GetService<ICurrentUserContext>();
                 }
                 return _currentUserContext;
             }

@@ -166,7 +166,7 @@ using (var serviceScope = app.Services.CreateScope())
     var services = serviceScope.ServiceProvider;
 
     var seederService = services.GetRequiredService<IAppSeederService>();
-    seederService.SeedAsync();
+    await seederService.SeedAsync();
 }
 
 app.Run();
