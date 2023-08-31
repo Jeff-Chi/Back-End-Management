@@ -73,7 +73,7 @@ namespace Management.Application
         /// <param name="currentUserContext">当前用户context</param>
         /// <returns></returns>
 
-        Task<CurrentUserDto> GetCurrentUserAsync(CurrentUserContext currentUserContext);
+        Task<CurrentUserDto> GetCurrentUserAsync(ICurrentUserContext currentUserContext);
 
         /// <summary>
         /// 使用refresh token 获取access token

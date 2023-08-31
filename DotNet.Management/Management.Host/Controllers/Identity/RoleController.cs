@@ -21,7 +21,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageResultDto<RoleDto>>> GetListAsync(GetRolesDto dto)
+        public async Task<ActionResult<PageResultDto<RoleDto>>> GetListAsync([FromQuery] GetRolesDto dto)
         {
             return await _roleAppService.GetListAsync(dto);
         }
@@ -85,7 +85,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpPut("{id:long}/permission")]
-        public async Task UpdateRolePermissionAsync(int id,List<string> permissionCodes)
+        public async Task UpdateRolePermissionAsync(int id, List<string> permissionCodes)
         {
             await _roleAppService.UpdateRolePermissionAsync(id, permissionCodes);
         }

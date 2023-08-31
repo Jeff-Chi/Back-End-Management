@@ -97,7 +97,7 @@ namespace Management.Host.Controllers.Identity
         /// <returns></returns>
         [Authorize]
         [HttpGet("current-user")]
-        public async Task<CurrentUserDto> GetCurrentUserAsync([FromServices] CurrentUserContext userContext)
+        public async Task<CurrentUserDto> GetCurrentUserAsync([FromServices] ICurrentUserContext userContext)
         {
             return await _userAppService.GetCurrentUserAsync(userContext);
         }

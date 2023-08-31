@@ -117,7 +117,7 @@ namespace Management.Application
             await _userRepository.UpdateAsync(user, true);
         }
 
-        public async Task<CurrentUserDto> GetCurrentUserAsync(CurrentUserContext currentUserContext)
+        public async Task<CurrentUserDto> GetCurrentUserAsync(ICurrentUserContext currentUserContext)
         {
             User? user = await _userRepository.GetAsync(currentUserContext.Id!.Value,
                 new GetUserDetailsInput { IncludeUserRoles = true });

@@ -10,7 +10,7 @@
         /// <summary>
         /// 取的数据条数
         /// </summary>
-        public int MaxResultCount { get; set; }
+        public int MaxResultCount { get; set; } = 10;
 
         
     }
