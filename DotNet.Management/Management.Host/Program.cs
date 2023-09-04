@@ -62,6 +62,8 @@ builder.Services.Configure<FileUploadOptions>(builder.Configuration.GetSection(F
 
 builder.Services.Configure<JwtTokenOptions>(builder.Configuration.GetSection(JwtTokenOptions.SectionName));
 
+builder.Services.Configure<AuditlogOptions>(builder.Configuration.GetSection(AuditlogOptions.SectionName));
+
 #endregion
 
 #region Authentication
@@ -147,6 +149,9 @@ app.UseMultipleStaticFiles(app.Environment);
 //app.UseHttpsRedirection();
 
 //app.UseSerilogRequestLogging();
+
+// audit lot middleware
+app.UseMiddleware<AuditLogMiddleware>();
 
 app.UseAppExceptionHandler(app.Environment);
 

@@ -149,7 +149,6 @@ namespace Managemrnt.EFCore
                 b.Property(l => l.Brower).HasMaxLength(Constants.MaxDescriptionLength);
                 b.Property(l => l.Controller).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
                 b.Property(l => l.Action).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
-                b.Property(l => l.Action).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
                 b.Property(l => l.RequestPath).IsRequired();
                 b.Property(l => l.RequestMethod).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
                 b.Property(l => l.RequestContentType).HasMaxLength(Constants.MaxDescriptionLength).IsRequired();
