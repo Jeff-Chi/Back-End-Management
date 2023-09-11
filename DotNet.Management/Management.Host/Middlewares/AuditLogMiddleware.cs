@@ -1,12 +1,7 @@
 ﻿using Management.Application;
-using Management.Domain;
-using Management.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
 
 namespace Management.Host
 {
@@ -29,9 +24,9 @@ namespace Management.Host
                 return;
             }
 
-            AuditLog log = new AuditLog(IdGenerator.GenerateNewId())
+            RequestResponseLogDto log = new RequestResponseLogDto()
             {
-                CreationTime = DateTime.Now,
+                RequestDateTime = DateTime.Now,
             };
 
             var request = context.Request;
@@ -72,7 +67,7 @@ namespace Management.Host
             log.Platform = userAgent;
             log.Controller = controllerName;
             log.Action = actionName;
-            log.CreationTime = DateTime.Now;
+            log.SourceIpAddress = ip;
 
             // Temporarily replace the HttpResponseStream, 
             // which is a write-only stream, with a MemoryStream to capture 
@@ -124,7 +119,7 @@ namespace Management.Host
             //var jsonString = logCreator.LogString(); /*log json*/
         }
 
-        private void LogError(AuditLog log, Exception exception)
+        private void LogError(RequestResponseLogDto log, Exception exception)
         {
             log.ExceptionMessage = exception.Message;
             log.ExceptionStackTrace = exception.StackTrace;
