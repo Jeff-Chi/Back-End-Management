@@ -139,5 +139,11 @@ namespace Management.Host.Controllers.Identity
         {
             return Ok(await _userAppService.RefreshTokenAsync(refreshToken));
         }
+
+        [HttpGet("[action]")]
+        public string LogTest(string a)
+        {
+            return a;
+        }
     }
 }

@@ -150,7 +150,7 @@ app.UseMultipleStaticFiles(app.Environment);
 
 //app.UseSerilogRequestLogging();
 
-// audit lot middleware
+// audit log middleware
 app.UseMiddleware<AuditLogMiddleware>();
 
 app.UseAppExceptionHandler(app.Environment);
@@ -165,7 +165,6 @@ app.MapControllers();
 
 // ef core auto save.
 app.UseMiddleware<EFCoreAutoSaveChangeMiddleware>();
-
 
 using (var serviceScope = app.Services.CreateScope())
 {

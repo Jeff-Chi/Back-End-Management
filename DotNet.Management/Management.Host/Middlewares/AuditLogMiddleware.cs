@@ -10,7 +10,7 @@ namespace Management.Host
         private readonly RequestDelegate _next;
         private readonly AuditlogOptions _options;
 
-        public AuditLogMiddleware(RequestDelegate next, IOptionsSnapshot<AuditlogOptions> options)
+        public AuditLogMiddleware(RequestDelegate next, IOptions<AuditlogOptions> options)
         {
             _next = next;
             _options = options.Value;
